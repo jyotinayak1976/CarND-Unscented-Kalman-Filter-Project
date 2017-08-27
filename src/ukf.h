@@ -63,9 +63,18 @@ public:
 
   ///* Augmented state dimension
   int n_aug_;
+  int n_sig_;
 
   ///* Sigma point spreading parameter
   double lambda_;
+
+  ///* The current NIS for radar
+
+  double NIS_radar_;
+
+  ///* The current NIS for laser
+
+  double NIS_laser_;
 
 
   /**
