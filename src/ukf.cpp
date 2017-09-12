@@ -22,12 +22,12 @@ UKF::UKF() {
 
   // initial covariance matrix
   P_ = MatrixXd(5, 5);
-  P_ << 0.0043, -0.0013 ,0.0030 , -0.0022, -0.0020,
-        -0.0013, 0.0077 ,0.0011 , 0.0071, 0.0060,
-        0.0030,  0.0011 ,0.0054 , 0.0007, 0.0008,
-        -0.0022, 0.0071 ,0.0007 , 0.0098, 0.0100,
-        -0.0020, 0.0060 ,0.0008 , 0.0100, 0.0123;
-
+  //P_ << 0.0043, -0.0013 ,0.0030 , -0.0022, -0.0020,
+  //      -0.0013, 0.0077 ,0.0011 , 0.0071, 0.0060,
+  //      0.0030,  0.0011 ,0.0054 , 0.0007, 0.0008,
+  //      -0.0022, 0.0071 ,0.0007 , 0.0098, 0.0100,
+  //      -0.0020, 0.0060 ,0.0008 , 0.0100, 0.0123;
+  //P_ = MatrixXd::Identity(5,5);
   n_x_ = 5;
   n_aug_ = 7;
   n_sig_ = 2*n_aug_ + 1;
@@ -207,7 +207,7 @@ void UKF::Prediction(double delta_t) {
   	v_p  = v_p  + nu_a * delta_t;
 
   	yaw_p = yaw_p + 0.5 * nu_yawdd * delta_t * delta_t;
-  	yaw_p = yawd_p + nu_yawdd * delta_t;
+  	yawd_p = yawd_p + nu_yawdd * delta_t;
 
   	Xsig_pred_(0,i) = px_p;
   	Xsig_pred_(1,i) = py_p;
@@ -229,9 +229,9 @@ void UKF::Prediction(double delta_t) {
 
   	//Normalizing angle
   	while (x_diff_(3) > M_PI)  x_diff_(3) -= 2.*M_PI;
-  	while (x_diff_(3) > -M_PI) x_diff_(3) += 2.*M_PI;
+  	while (x_diff_(3) < -M_PI) x_diff_(3) += 2.*M_PI;
 
-  	P_  = P_ + weights_(i) * x_diff_.transpose();
+  	P_  = P_ + weights_(i) * x_diff_ * x_diff_.transpose();
   }
 }
 
